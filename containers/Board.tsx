@@ -11,16 +11,6 @@ function Board() {
   );
   const [winner, setWinner] = useState(null);
 
-  useEffect(()=>{
-    const w = calculateWinner(squares)
-    if(w){
-      setWinner(w)
-    }
-
-    if(!w && !squares.filter((square) => !square).length){
-      setWinner('BOTH')
-    }
-  })
 
   function setSquareValue(index:number) {
     const newData = squares.map((val, i) => {
@@ -32,6 +22,17 @@ function Board() {
     setSquares(newData)
     setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X')
   }
+
+  useEffect(()=>{
+    const w = calculateWinner(squares)
+    if(w){
+      setWinner(w);
+    }
+
+    if(!w && !squares.filter((square) => !square).length){
+      setWinner('BOTH')
+    }
+  })
 
   function reset() {
     setSquares(Array(9).fill(null))
