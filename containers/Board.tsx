@@ -9,7 +9,7 @@ function Board() {
   const [currentPlayer, setCurrentPlayer] = useState<'X' | 'O'>(
     Math.round(Math.random() * 1) === 1 ? 'X' : 'O'
   );
-  const [winner, setWinner] = useState(null);
+  const [winner, setWinner] = useState<Player>(null);
 
 
   function setSquareValue(index:number) {
@@ -22,25 +22,14 @@ function Board() {
     setSquares(newData)
     setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X')
   }
-
-  useEffect(()=>{
-    const w = calculateWinner(squares)
-    if(w){
-      setWinner(w);
-    }
-
-    if(!w && !squares.filter((square) => !square).length){
-      setWinner('BOTH')
-    }
-  })
-
+ 
   function reset() {
     setSquares(Array(9).fill(null))
     setWinner(null)
     setCurrentPlayer(Math.round(Math.random() * 1) === 1 ? 'X' : 'O')
   }
 
-  function calculateWinner(squares: Player) {
+  function calculateWinner(squares: Player[]) {
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
@@ -60,10 +49,22 @@ function Board() {
     return (null);
   }
 
+  useEffect(()=>{
+    const w = calculateWinner(squares)
+    if(w){
+      setWinner(w);
+    }
+
+    if(!w && !squares.filter((square) => !square).length){
+      setWinner('BOTH')
+    }
+  })
+
+
   return (
     <div>
       {!winner && <p> Hey {currentPlayer}, it's your turn</p>}
-      {winner && winner===!'BOTH' && <p> Congratulations {winner}</p>}
+      {winner && winner!=='BOTH' && <p> Congratulations {winner}</p>}
       {winner && winner==='BOTH' && <p>Congratulations you're both winners</p>}
 
       <div className="grid">
